@@ -1,0 +1,23 @@
+.shipping h1 {
+    padding-top: 30px;
+    text-align: center;
+    color: #336BC7
+}
+
+.shipping h5 {
+    text-align: left;
+    padding-left: 300px;
+    padding-right: 300px;
+    margin-top: 50px;
+    color: #5AB04C
+}
+
+.shipping p {
+    text-align: left;
+    padding-left: 300px;
+    padding-right: 300px;
+}
+
+.last {
+    margin-bottom: 50px;
+}
