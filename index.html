@@ -1,0 +1,28 @@
+{% extends "includes/base.html" %}
+{% block title %} Home {% endblock %}
+
+
+{% block content %}
+ <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chatbotstyle.css')}}"/>
+    <div id="chat-container">
+        <div id="chat-header" onclick="toggleChat()">
+            <span class="user-icon"></span> Chatbot
+            <span id="toggle-icon" class="close-icon">❌</span>
+        </div>
+        <div id="chat-body"></div>
+        <div id="input-container">
+            <form id="chat-form">
+                <input type="text" name="user_message" placeholder="Type your message" onkeypress="handleKeyPress(event)">
+                <button type="button" onclick="sendMessage()">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <button class="toggle-button" onclick="toggleChat()">💬</button>
+    <script src="{{ url_for('static', filename='javascript.js') }}"></script>
+{% endblock %}
+
+
+

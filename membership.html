@@ -1,0 +1,227 @@
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+{% extends "includes/base.html" %}
+{% block title %}Membership{% endblock %}
+
+{% block content %}
+<!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='membershipstyle.css')}}"/>
+<div class="headbanner">
+    <img src="static/images/banner.jpg">
+    <h1>Membership</h1>
+</div>
+
+<div class="benefits">
+    <h1>Our Benefits</h1>
+</div>
+
+<div class="tier">
+<div class="items">
+    <div class="babysprout">
+    <h1>Baby sprout</h1>
+    <p>Spent $50 - $100 in total to get <span>half</span> pot</p>
+    <img src="static/images/sprout.png" alt="babysprout" id="sprout">
+    </div>
+</div>
+
+<div class="items">
+    <div class="adultflower">
+    <h1>Adult flower</h1>
+    <p>Spent $100 & above in total to get <span>full</span> pot</p>
+    <img src="static/images/flower.png" alt="adultflower" id="flower">
+    </div>
+</div>
+</div>
+
+<div class="pots">
+    <p>Fill up all 8 pots to full pots get a <span>mystery</span> reward!</p>
+    <div class="pots">
+        <img id="emptypot1" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot2" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot3" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot4" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot5" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot6" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot7" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+        <img id="emptypot8" src="{{ url_for('static', filename='images/emptypot.png') }}" alt="Empty pot">
+    </div>
+    <p id="cumulativeAmount">Total spent: $0</p>
+</div>
+
+<div class="amount">
+    <button id="enterbutton">Enter amount</button>
+</div>
+
+<div class="welcome">
+    <h1>Welcome perks</h1>
+</div>
+
+<div class="stuffs">
+    <div class="perks">
+        <div class="giftvoucher">
+            <img src="static/images/voucher.png" alt="giftvoucher" id="voucher">
+            <h2>$5 voucher</h2>
+            <p>Min. spend $30</p>
+        </div>
+    </div>
+
+    <div class="perks">
+        <div class="spinthewheel">
+            <img src="static/images/wheel.png" alt="spinthewheel" id="wheel">
+            <h2>Spin the wheel</h2>
+            <p>Sure-win rewards!</p>
+            <button id="spin"><a href="/wheel">Spin the wheel here!</a></button>
+        </div>
+    </div>
+</div>
+
+<div class="additional">
+    <h1>Additional perks</h1>
+</div>
+
+<div class="stuffs2">
+    <div class="perks">
+        <div class="shipping">
+            <img src="static/images/ship.png" alt="shipping" id="ship">
+            <h2>Free shipping</h2>
+            <p>Min. spend $69.90</p>
+        </div>
+    </div>
+
+    <div class="perks">
+        <div class="birthday">
+            <img src="static/images/cake.png" alt="birthday" id="cake">
+            <h2>Birthday month bonus!</h2>
+            <p>$8 off no min. spend</p>
+        </div>
+    </div>
+</div>
+
+<div class="steps">
+    <h2>How to join:</h2>
+    <img src="static/images/1.png" alt="step1">
+    <img src="static/images/2.png" alt="step2">
+    <img src="static/images/3.png" alt="step3">
+        <h5>Create an account <a href="www.example.com">here</a> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+            Login and spin our sure-win wheel &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+            Lastly, enjoy the benefits!</h5>
+</div>
+
+<div class="signupnow">
+    <img src="static/images/minibanner.png" alt="minibanner">
+</div>
+
+<div class="signup">
+    <button id="signupbutton">Sign up now!</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var currentPot = localStorage.getItem("currentPot") || 1; // Initialize the current pot from local storage
+        var cumulativeAmount = localStorage.getItem("cumulativeAmount") || 0; // Initialize cumulative amount from local storage
+
+        // Fetch and display the initial amount spent on page load
+        fetchAmountSpent();
+
+        $("#enterbutton").click(function () {
+            var userInput = prompt("Please enter a number:");
+
+            // Validate if userInput is a number and greater than or 0
+            if (!isNaN(userInput) && userInput !== null) {
+                if (userInput <= 0) {
+                    alert("Please enter an amount greater than $0.");
+                    return; // Exit function if the amount is less than 0
+                }
+
+                cumulativeAmount = parseInt(cumulativeAmount) + parseInt(userInput); // Update cumulative amount
+
+                // Display the updated cumulative amount
+                $("#cumulativeAmount").text("Total spent: $" + cumulativeAmount);
+
+                // Call a Flask route to handle the logic and update the pot images
+                $.ajax({
+                    type: "POST",
+                    url: "/update_amount_spent",
+                    data: { amount_spent: cumulativeAmount },
+                    success: function (amountResponse) {
+                        if (amountResponse.success !== undefined) {
+                            // Change the source of the current pot based on the cumulative amount
+                            updatePots(cumulativeAmount);
+
+                            // Increment currentPot
+                            currentPot = (currentPot % 8) + 1; // Assuming you have 8 pot images
+
+                            // Check if cumulative amount reaches 800, then reset the cycle
+                            if (cumulativeAmount >= 800) {
+                                alert("Cumulative amount reached 800. Resetting cycle.");
+                                resetPots(); // Call the function to reset all pots
+                                cumulativeAmount = 0; // Reset the cumulative amount
+                            }
+
+                            // Save the currentPot and cumulativeAmount to local storage
+                            localStorage.setItem("currentPot", currentPot);
+                            localStorage.setItem("cumulativeAmount", cumulativeAmount);
+                        } else if (amountResponse.error !== undefined) {
+                            alert("Error updating amount spent: " + amountResponse.error);
+                        } else {
+                            alert("Unexpected response from the server.");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while communicating with the server.");
+                    }
+                });
+            } else {
+                alert("Invalid input. Please enter a number.");
+            }
+        });
+
+        // Function to reset all pots to empty
+        function resetPots() {
+            for (var i = 1; i <= 8; i++) {
+                $("#emptypot" + i).attr("src", "{{ url_for('static', filename='images/emptypot.png') }}");
+            }
+        }
+
+        // Function to update pots based on cumulative amount
+    function updatePots(cumulativeAmount) {
+        // Assuming each pot corresponds to 50 in cumulative amount
+        var numberOfFullPots = Math.floor(cumulativeAmount / 100);
+        var numberOfHalfPots = Math.floor((cumulativeAmount % 100) / 50);
+
+        // Update the pots accordingly
+        for (var i = 1; i <= 8; i++) {
+            if (i <= numberOfFullPots) {
+                // Change the source of the pot to a full image
+                $("#emptypot" + i).attr("src", "{{ url_for('static', filename='images/fullpot.png') }}");
+            } else if (i <= numberOfFullPots + numberOfHalfPots) {
+                // Change the source of the pot to a half image
+                $("#emptypot" + i).attr("src", "{{ url_for('static', filename='images/halfpot.png') }}");
+            } else {
+                // Change the source of the pot to an empty image
+                $("#emptypot" + i).attr("src", "{{ url_for('static', filename='images/emptypot.png') }}");
+            }
+        }
+    }
+
+        // Fetch and display the amount spent on page load
+        function fetchAmountSpent() {
+            $.ajax({
+                type: "GET",
+                url: "/get_amount_spent",
+                success: function (data) {
+                    cumulativeAmount = data.amount_spent; // Update cumulative amount
+                    $("#cumulativeAmount").text("Total spent: $" + cumulativeAmount);
+                    updatePots(cumulativeAmount); // Update pots based on cumulative amount
+                },
+                error: function (xhr, status, error) {
+                    console.log("An error occurred while fetching the amount spent:", error);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Backend Viewer</title>
+</head>
+<body>
+    <h1>Chatbot Backend Viewer</h1>
+
+    <div id="messages-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function fetchMessages() {
+            $.ajax({
+                type: 'GET',
+                url: '/get_messages',
+                success: function (response) {
+                    var messages = response.messages;
+                    var messagesContainer = $('#messages-container');
+
+                    // Clear existing messages
+                    messagesContainer.empty();
+
+                    // Display messages
+                    for (var i = 0; i < messages.length; i++) {
+                        messagesContainer.append('<div class="message">' + messages[i] + '</div>');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error fetching messages:', error);
+                }
+            });
+        }
+
+        // Fetch messages on page load
+        fetchMessages();
+    </script>
+</body>
+</html>

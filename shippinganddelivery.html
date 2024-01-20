@@ -1,0 +1,38 @@
+{% extends "includes/base.html" %}
+{% block title %}shipping and delivery{% endblock %}
+
+{% block content %}
+<!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='shippingstyle.css')}}"/>
+
+<div class="shipping">
+<h1>Shipping & Delivery</h1>
+    <h5>Do you do international shipping?</h5>
+    <p class="last">Currently, we only do shipping in Singapore.</p>
+
+    <h5>What are the delivery options</h5>
+    <p>We mail Normal Mail orders via SingPost. Please understand that we are not liable for lost packages under Normal Mail after they are mailed out.</p>
+    <p>You also have the option of Tracked mail orders at only SGD 2. This option is highly encouraged as you will be able to track your parcels and delivery time is shorter.</p>
+    <p class="last">We offer free delivery for all orders above SGD 69.90.</p>
+
+    <h5>How long does it take for my package to get delivered to my house?</h5>
+    <p class="last">Usually, it takes up to 1 week. However, it can take up to 2 weeks too. (depending on the situation)</p>
+
+    <h5>What do you use to package</h5>
+    <p>We use biodegradable polymailers to pack your purchases as we would like to use minimal plastic when packing your orders for delivery.
+    however, we will still use plastic if needed because it is important that your purchases get delivered safely without damages.</p>
+    <p class="last">For products that we are unable to fit into the polymailers, we pack them in cardboard boxes.
+    These cardboard boxes are collected from friends, family, suppliers etc. to be reused.</p>
+
+    <h5>I received damaged / defective products. What should I do?</h5>
+    <p>We would always check and pack the packages to make sure they are in the perfect condition before shipping it out.
+    However, we understand that items may get damaged during the delivery process and we will try to find the best solution for you</p>
+    <p class="last">Email <a href="mailto:reglow16@gmail.com">reglow16@gmail.com</a> with your concerns and we will get back to you as soon as possible</p>
+
+    <h5>Can I return or get a refund for my purchases?</h5>
+    <p>Sure! We totally understand if the products you have received is not up to your standards or you don't need it anymore</p>
+    <p class="last">Email <a href="mailto:reglow16@gmail.com">reglow16@gmail.com</a> with your concerns and we will get back to you as soon as possible</p>
+
+</div>
+
+{% endblock %}
