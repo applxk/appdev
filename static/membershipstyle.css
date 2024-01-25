@@ -37,7 +37,7 @@
 .benefits h1 {
     text-align: center;
     padding-top: 50px;
-    color: #336BC7
+    color: #336BC7;
 }
 
 .tier {
@@ -45,7 +45,7 @@
     margin-left: 300px;
 }
 
-.babysprout {7;
+.babysprout {
     text-align: center;
 }
 
@@ -98,22 +98,22 @@ span {
 }
 
 #enterbutton, #signupbutton {
-  background-color: #5AB04C;
-  border: none;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  font-size: 20px;
-  margin: 4px 2px;
-  opacity: 0.6;
-  transition: 0.3s;
-  display: inline-block;
-  text-decoration: none;
-  cursor: pointer;
+    background-color: #5AB04C;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 20px;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 #enterbutton:hover, #signupbutton:hover {
-  opacity: 1
+    opacity: 1;
 }
 
 .welcome, .additional h1 {
@@ -135,7 +135,7 @@ span {
     text-align: center;
 }
 
-.giftvoucher h2{
+.giftvoucher h2 {
     margin-top: 35px;
 }
 
@@ -165,7 +165,7 @@ span {
     text-align: center;
 }
 
-.shipping h2{
+.shipping h2 {
     margin-top: 65px;
 }
 
@@ -175,7 +175,7 @@ span {
     margin-top: 30px;
 }
 
-.birthday h2{
+.birthday h2 {
     margin-top: 35px;
 }
 
@@ -194,26 +194,32 @@ span {
     color: #5AB04C;
 }
 
+.step-container {
+    display: flex;
+    margin-left: 20px;
+}
+
 .steps {
     margin-top: 50px;
+    padding-top: 20px;
+    padding-bottom: 30px;
     background-color: #8DC384;
 }
 
 .steps h2 {
     padding-top: 30px;
-    margin-left: 30px;
 }
 
 .steps img {
     width: 300px;
     height: 300px;
-    margin-left: 150px;
+    margin-left: 100px;
 }
 
 .steps h5 {
     margin-top: -20px;
-    margin-left: 195px;
-    padding-bottom: 30px;
+    margin-left: 100px;
+    text-align: center;
 }
 
 .signupnow img {
@@ -222,4 +228,74 @@ span {
     margin-right: auto;
     width: 500px;
     height: 300px;
+}
+
+/* Responsive styles for smaller screens */
+
+@media only screen and (max-width: 768px) {
+    .tier {
+        flex-direction: column;
+        margin-left: 0;
+    }
+
+    h1 {
+    padding-top: 30px;
+    }
+
+    .babysprout, .adultflower {
+        margin-left: 0;
+    }
+
+    .pots img {
+        width: 150px;
+        height: 150px;
+        margin: 20px;
+    }
+
+    .stuffs, .stuffs2, .step-container {
+        flex-direction: column;
+        margin-left: 0;
+    }
+
+    .perks {
+        margin-top: 20px;
+    }
+
+    .perks #voucher {
+    height: 200px;
+    width: 400px;
+    margin-top: 100px;
+    }
+
+    .perks #wheel, .perks #ship, .perks #cake {
+        width: 250px;
+        height: 250px;
+        margin-top: 50px;
+    }
+
+    .spinthewheel, .birthday {
+    margin-left: 0px;
+    }
+
+    .steps h2 {
+    padding-top: 30px;
+    margin-left: 20px;
+    }
+
+    .steps img {
+    width: 300px;
+    height: 300px;
+    margin-left: 180px;
+    }
+
+    .steps h5 {
+    margin-top: -20px;
+    margin-left: 0px;
+    text-align: center;
+    }
+
+    .signupnow img {
+        width: 100%;
+        height: auto;
+    }
 }
