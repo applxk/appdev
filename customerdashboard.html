@@ -1,0 +1,68 @@
+{% extends "includes/base.html" %}
+{% block title %}Customer dashboard{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet"  href="{{ url_for('static', filename='/COdashboard.css') }}">
+<a href="/"><img class="imgtext" src="static/images/homeicon.jpg" width="30px" height="30px" style="margin-left:40px"/> </a>&nbsp; Home > Profile Dashboard
+<hr>
+    <form class="row">
+  <div class="column" >         <!----column 1--->
+  <div class="profile-btn">
+  <div class="btn-group-vertical"  aria-label="Vertical button group">
+
+  <button type="button" id="btn-co" class="active"> <a href="#">
+           <img class="imgtext" src="static/images/acc_pfp.jpg" width="50px" height="50px" style="margin-right:5px;" /> Profile </a> </button>
+
+  <button type="button" class="btn-co"> <a href="#">
+           <img class="imgtext" src="static/images/bagshop.jpg" width="30px" height="30px" style="margin-right:10px;"/> Orders </a> </button>
+
+  <button type="button" class="btn-co"> <a href="#">
+           <img class="imgtext" src="static/images/address.jpg" width="30px" height="30px" style="margin-right:10px;"/> My Address </a> </button>
+
+  <button type="button" class="btn-co"> <a href="#">
+           <img class="imgtext" src="static/images/logout.jpg" width="30px" height="30px" style="margin-right:10px;"/> Logout </a> </button>
+  </div>
+</div>
+  </div>
+  <div class="column"> <!----column 2--->
+<h2>My Profile</h2>
+<hr>
+      <form id="contactForm">
+
+            <label class="form-label" for="name">Name:
+      <input class="form-control" id="name" type="text" placeholder="Name" required /></label>
+                <label class="form-label" for="emailAddress">Email Address:
+      <input class="form-control" id="emailAddress" type="email" placeholder="Email Address" /></label>
+          <label class="form-label" for="phoneno">Phone Number:
+      <input class="form-control" id="phoneno" type="email" placeholder="Phone Number" /></label>
+          <button type="submit" class="form-control">Edit Profile</button>
+
+           </form>
+            </div>
+
+      <!-- Bootstrap 5 starter form -->
+    <!-- Name input -->
+
+    <!-- Email address input -->
+
+  </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the Product dropdown element
+    var productDropdown = document.getElementById('productDropdown');
+
+    // Add an event listener for the shown.bs.dropdown event
+    productDropdown.addEventListener('shown.bs.dropdown', function () {
+        // Set the 'active' class when the dropdown is shown
+        productDropdown.classList.add('active');
+    });
+
+    // Add an event listener for the hidden.bs.dropdown event
+    productDropdown.addEventListener('hidden.bs.dropdown', function () {
+        // Remove the 'active' class when the dropdown is hidden
+        productDropdown.classList.remove('active');
+    });
+});
+</script>
+{% endblock %}
