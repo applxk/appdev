@@ -40,6 +40,7 @@ footer{
     min-height:20vh;
     margin-top:290px;
     background-color:#FFEEDD;
+    z-index: 999;
 }
 .footer-top{
     background-color:#FFEEDD;
