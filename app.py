@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import random
 import string
 from datetime import datetime
-from backend import store_chat_messages, retrieve_chat_messages, store_promo_codes
+from backend import store_chat_messages,  retrieve_chat_messages, retrieve_amount_spent, store_amount_spent, store_promo_codes, retrieve_promo_codes, store_subscribed_email, retrieve_subscribed_emails
 
 app = Flask(__name__)
 
@@ -159,14 +159,19 @@ def chat():
 
 
 #membership
-cumulative_amounts = []
+cumulative_amounts = retrieve_amount_spent() or []
 
 @app.route('/edit_amount_spent', methods=['POST'])
 def edit_amount_spent():
     try:
         amount_spent = int(request.form.get('amount_spent'))
-        cumulative_amounts.clear()
+
+        # Append the new amount to the cumulative_amounts list
         cumulative_amounts.append(amount_spent)
+
+        # Store the updated cumulative amounts in shelve
+        store_amount_spent(cumulative_amounts)
+
         return jsonify(success=True)
 
     except ValueError as ve:
@@ -219,6 +224,33 @@ def membership_backend():
 def shipping_and_delivery():
     return render_template('includes/shippinganddelivery.html')
 
+#newsletter thank you page
+@app.route('/newsletterthankyou')
+def newsletter_thank_you():
+    return render_template('includes/newsletterthankyou.html')
+
+#newsletter backend
+@app.route('/newsletterbackend', methods=['GET'])
+def newsletter_backend():
+    # Retrieve subscribed emails using the function
+    subscribed_emails = retrieve_subscribed_emails()
+
+    # Pass the function as a variable to the template
+    return render_template('includes/newsletterbackend.html', retrieve_subscribed_emails=retrieve_subscribed_emails, subscribed_emails=subscribed_emails)
+
+@app.route('/subscribe_to_newsletter', methods=['POST'])
+def subscribe_to_newsletter():
+    email = request.form.get('email')
+
+    # Store the email in the Shelve database
+    store_subscribed_email(email)
+
+    print(f"Subscribed email: {email}")
+
+    return redirect(url_for('newsletter_thank_you'))
 
 if __name__ == '__main__':
+    # Retrieve promo codes from storage or initialize an empty list
+    generated_promo_codes = retrieve_promo_codes() or []
+
     app.run(debug=True)
