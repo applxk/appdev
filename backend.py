@@ -8,6 +8,7 @@ def retrieve_chat_messages():
     with shelve.open('chat_messages_db') as db:
         return db.get('messages', [])
 
+👽 #(COPY WHOLE OF store_amount_spent) 👽
 def store_amount_spent(amounts):
     with shelve.open('amount_db') as db:
         db['amount'] = amounts
@@ -23,7 +24,8 @@ def store_promo_codes(promo_codes):
 def retrieve_promo_codes():
     with shelve.open('promo_codes_db') as db:
         return db.get('promo_codes', [])
-
+        
+👽 #(COPY WHOLE OF store_subscribed_email & retrieve_subscribed_emails) 👽
 def store_subscribed_email(email):
     subscribed_emails = retrieve_subscribed_emails()
     subscribed_emails.append(email)
