@@ -1,0 +1,52 @@
+{% extends "includes/base.html" %}
+{% block title %} newsletterthankyou {% endblock %}
+
+
+{% block content %}
+
+<style>
+    .thankyou {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .thankyou h1 {
+       padding-top: 100px;
+       text-align: center;
+       color: #336BC7;
+    }
+
+    #backtohome {
+        margin-top: 30px;
+    }
+
+    .thankyou button {
+        background-color: #5AB04C;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        font-size: 18px;
+        margin: 4px 10px;
+        opacity: 0.6;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .thankyou button:hover {
+        opacity: 1;
+    }
+
+    #backtohome a {
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="thankyou">
+    <h1>Thank you for subscribing to our newsletter!</h1>
+    <p>You will receive an email from us every month and be the first to know about our new products, sneak peeks, and any secret offers.</p>
+
+    <button id="backtohome"><a href="/homepage">Back to home</a></button>
+</div>
+
+{% endblock %}
