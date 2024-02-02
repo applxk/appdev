@@ -254,7 +254,7 @@ def shipping_and_delivery():
 def terms_and_conditions():
     return render_template('includes/termsandconditions.html')
 
-👽 # (COPY WHOLE OF #newsletter thank you & #newsletterbackend) 👽
+👽 # (COPY WHOLE OF #newsletter thank you, #newsletterbackend) 👽
 #newsletter thank you page
 @app.route('/newsletterthankyou')
 def newsletter_thank_you():
@@ -280,7 +280,22 @@ def subscribe_to_newsletter():
 
     return redirect(url_for('newsletter_thank_you'))
 
-👽 # (END OF COPYING #newsletter thank you & #newsletterbackend) 👽
+@app.route('/delete_subscribed_email', methods=['POST'])
+def delete_subscribed_email():
+    email_to_delete = request.form.get('email')
+    subscribed_emails = retrieve_subscribed_emails()
+
+    if email_to_delete in subscribed_emails:
+        subscribed_emails.remove(email_to_delete)
+
+        # Store the updated subscribed emails in shelve
+        store_subscribed_email(subscribed_emails)
+
+        return redirect(url_for('newsletter_backend'))
+    else:
+        return jsonify({'success': False, 'message': 'Email not found'}), 404
+
+👽 # (END OF COPYING newsletter shits) 👽
 
 if __name__ == '__main__':
 
