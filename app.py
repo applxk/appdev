@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 import random
 import string
 from datetime import datetime
+
+👽 # (COPY THIS LINE) 👽
 from backend import store_chat_messages,  retrieve_chat_messages, retrieve_amount_spent, store_amount_spent, store_promo_codes, retrieve_promo_codes, store_subscribed_email, retrieve_subscribed_emails
 
 app = Flask(__name__)
@@ -15,6 +17,8 @@ def customer_dashboard():
 @app.route('/accountdetails')
 def account_details():
     return render_template('includes/accountdetails.html')
+
+👽 # (COPY THE WHOLE OF #wheel & #coupons) 👽
 
 # wheel
 @app.route('/wheel')
@@ -60,9 +64,11 @@ generated_promo_codes = []
 @app.route('/mycoupons')
 def my_coupons():
     return render_template('includes/mycoupons.html', promo_codes=generated_promo_codes)
+👽 # (END OF COPYING WHOLE OF #wheel & #coupons ) 👽
 
 #chatbot
 
+👽 # (COPY THIS LINE chat_messages) 👽
 # List to store chat messages
 chat_messages = []
 
@@ -132,6 +138,7 @@ def is_english(text):
     else:
         return True
 
+#chatbot backend
 @app.route('/chatbotbackend_viewer')
 def chatbotbackend_viewer():
     return render_template('includes/chatbotbackend.html')
@@ -157,7 +164,24 @@ def chat():
 
     return response
 
+👽 # (COPY THIS WHOLE OF /delete_message) 👽
 
+@app.route('/delete_message', methods=['POST'])
+def delete_message():
+    index_to_delete = int(request.form.get('index'))
+
+    if 0 <= index_to_delete < len(chat_messages):
+        deleted_message = chat_messages.pop(index_to_delete)
+
+        # Store the updated chat messages in shelve
+        store_chat_messages(chat_messages)
+
+        return jsonify({'success': True, 'deleted_message': deleted_message})
+    else:
+        return jsonify({'success': False, 'message': 'Invalid index'}), 400
+
+
+👽 # (COPY WHOLE OF #membership) 👽
 #membership
 cumulative_amounts = retrieve_amount_spent() or []
 
@@ -213,6 +237,7 @@ def reset_amount_spent():
 @app.route('/membership')
 def membership():
     return render_template('includes/membership.html')
+👽 # (END OF COPYING #membership) 👽
 
 #membership backend
 @app.route('/membershipbackend')
@@ -224,6 +249,12 @@ def membership_backend():
 def shipping_and_delivery():
     return render_template('includes/shippinganddelivery.html')
 
+#terms and conditions
+@app.route('/termsandconditions')
+def terms_and_conditions():
+    return render_template('includes/termsandconditions.html')
+
+👽 # (COPY WHOLE OF #newsletter thank you & #newsletterbackend) 👽
 #newsletter thank you page
 @app.route('/newsletterthankyou')
 def newsletter_thank_you():
@@ -249,7 +280,14 @@ def subscribe_to_newsletter():
 
     return redirect(url_for('newsletter_thank_you'))
 
+👽 # (END OF COPYING #newsletter thank you & #newsletterbackend) 👽
+
 if __name__ == '__main__':
+
+    👽 # (COPY chat_messages & generated_promo_code lines) 👽
+    # List to store chat messages
+    chat_messages = retrieve_chat_messages()
+
     # Retrieve promo codes from storage or initialize an empty list
     generated_promo_codes = retrieve_promo_codes() or []
 
