@@ -1,0 +1,65 @@
+<style>
+    .newsletter {
+    margin: 20px;
+    }
+
+    .newsletter table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .newsletter th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .newsletter th {
+        background-color: #f2f2f2;
+    }
+
+    .newsletter button {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 6px 10px;
+        cursor: pointer;
+    }
+
+    .newsletter button:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="newsletter">
+    <h1>Newsletter Backend</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Emails</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set subscribed_emails = retrieve_subscribed_emails() %}
+            {% if subscribed_emails %}
+                {% for email in subscribed_emails %}
+                    <tr>
+                        <td>{{ email }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('delete_subscribed_email') }}">
+                                <input type="hidden" name="email" value="{{ email }}">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="2">No emails subscribed yet.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
