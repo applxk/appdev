@@ -8,7 +8,6 @@ def retrieve_chat_messages():
     with shelve.open('chat_messages_db') as db:
         return db.get('messages', [])
 
-👽 #(COPY WHOLE OF store_amount_spent) 👽
 def store_amount_spent(amounts):
     with shelve.open('amount_db') as db:
         db['amount'] = amounts
@@ -17,15 +16,17 @@ def retrieve_amount_spent():
     with shelve.open('amount_db') as db:
         return db.get('amount', 0)
 
-def store_promo_codes(promo_codes):
-    with shelve.open('promo_codes_db') as db:
-        db['promo_codes'] = promo_codes
+# 👽 (delete anything related to promo_code) 👽
+# 👽 (add with everything that has won_gifts) 👽
 
-def retrieve_promo_codes():
-    with shelve.open('promo_codes_db') as db:
-        return db.get('promo_codes', [])
-        
-👽 #(COPY WHOLE OF store_subscribed_email & retrieve_subscribed_emails) 👽
+def store_won_gifts(won_gifts):
+    with shelve.open('won_gifts_db') as db:
+        db['won_gifts'] = won_gifts
+
+def retrieve_won_gifts():
+    with shelve.open('won_gifts_db') as db:
+        return db.get('won_gifts', [])
+
 def store_subscribed_email(email):
     subscribed_emails = retrieve_subscribed_emails()
     subscribed_emails.append(email)
