@@ -1,3 +1,5 @@
+👽 (just copy everything) 👽
+
 {% extends "includes/base.html" %}
 {% block title %} mycoupons {% endblock %}
 
@@ -5,25 +7,27 @@
 <!-- stylesheet -->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mycouponsstyle.css')}}"/>
 
-<h1 class="header">Your current coupons</h1>
+<div class="promocode">
+    <h1 class="header">Your current coupons</h1>
 
-{% if promo_codes %}
-  <ul>
-    {% for code in promo_codes %}
-      <li class="coupons">
-        <span>{{ code }}</span>
-        <button onclick="redeemCoupon('{{ code }}')">Redeem</button>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No coupons available</p>
-{% endif %}
+    {% if won_gifts %}
+        <ul>
+            {% for gift in won_gifts %}
+                <li class="coupons">
+                    <span>{{ gift }}</span>
+                    <button onclick="redeemGift('{{ gift }}')">Redeem</button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No coupons available</p>
+    {% endif %}
+</div>
 
 <script>
-  function redeemCoupon(code) {
-    alert('Coupon ' + code + ' redeemed!');
-  }
+    function redeemGift(gift) {
+        alert('Gift ' + gift + ' redeemed!');
+    }
 </script>
 
 {% endblock %}
