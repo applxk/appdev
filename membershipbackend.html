@@ -1,3 +1,5 @@
+👽 (just replace everything) 👽
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,20 +18,20 @@
 </div>
 
 <div>
-    <h2>Generated Promo Codes:</h2>
-    <div id="promo_codes"></div>
+    <h2>Won Gifts:</h2>
+    <div id="won_gifts"></div>
 </div>
 
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<!-- Script to update the total amount spent dynamically -->
+<!-- Script to update the total amount spent and won gifts dynamically -->
 <script>
     $(document).ready(function () {
-        // Fetch and display the amount spent and promo codes on page load
-        fetchAmountSpentAndPromoCodes();
+        // Fetch and display the amount spent and won gifts on page load
+        fetchAmountSpentAndGifts();
 
-        function fetchAmountSpentAndPromoCodes() {
+        function fetchAmountSpentAndGifts() {
             // Fetch amount spent
             $.ajax({
                 type: "GET",
@@ -42,47 +44,56 @@
                 }
             });
 
-            // Fetch promo codes
+            // Fetch won gifts
             $.ajax({
                 type: "GET",
-                url: "/get_promo_codes",
+                url: "/get_won_gifts",
                 success: function (data) {
-                    // Display promo codes in a list with delete buttons
-                    var promoCodesList = data.promo_codes.map(code => `<li>${code} <button class="delete-btn" data-code="${code}" onclick="deletePromoCode('${code}')">Delete</button></li>`).join('');
-                    $("#promo_codes").html(`<ul>${promoCodesList}</ul>`);
+                    // Display won gifts in a list with delete buttons
+                    var wonGiftsList = data.won_gifts.map(gift => `<li>${gift} <button class="delete-btn" data-gift="${gift}" onclick="deleteGift('${gift}')">Delete</button></li>`).join('');
+                    $("#won_gifts").html(`<ul>${wonGiftsList}</ul>`);
                 },
                 error: function (xhr, status, error) {
-                    console.log("An error occurred while fetching promo codes:", error);
+                    console.log("An error occurred while fetching won gifts:", error);
                 }
             });
         }
 
-        // Set interval to periodically fetch and update the amount spent and promo codes
-        setInterval(fetchAmountSpentAndPromoCodes, 5000);  // Adjust the interval as needed
+        // Set interval to periodically fetch and update the amount spent and won gifts
+        setInterval(fetchAmountSpentAndGifts, 5000);  // Adjust the interval as needed
 
         // Handle edit button click for amount spent
-        window.editAmount = function () {
+window.editAmount = function () {
     var newAmount = prompt("Enter the new amount:");
 
-    if (newAmount !== null && !isNaN(newAmount) && parseFloat(newAmount) > -1) {
-        $.ajax({
-            type: "POST",
-            url: "/edit_amount_spent",
-            data: { amount_spent: newAmount },
-            success: function (response) {
-                if (response.success) {
-                    alert("Amount updated successfully!");
-                    fetchAmountSpentAndPromoCodes(); // Refresh the displayed amount and promo codes
-                } else {
-                    alert("Failed to update amount: " + response.error);
+    // Check if the input is not null, not empty, and is a valid number
+    if (newAmount !== null && newAmount.trim() !== "" && !isNaN(newAmount)) {
+        // Convert the input to a number
+        var parsedAmount = parseFloat(newAmount);
+
+        // Check if the input is a positive number
+        if (parsedAmount >= 0) {
+            $.ajax({
+                type: "POST",
+                url: "/update_amount_spent",
+                data: { amount_spent: parsedAmount },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Amount updated successfully!");
+                        fetchAmountSpentAndGifts(); // Refresh the displayed amount and won gifts
+                    } else {
+                        alert("Failed to update amount: " + response.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("An error occurred while updating the amount: " + error);
                 }
-            },
-            error: function (xhr, status, error) {
-                alert("An error occurred while updating the amount: " + error);
-            }
-        });
+            });
+        } else {
+            alert("Please enter a non-negative number.");
+        }
     } else {
-        alert("Please enter a positive number");
+        alert("Please enter a valid number.");
     }
 };
 
@@ -96,7 +107,7 @@
                     success: function (response) {
                         if (response.success) {
                             alert("Amount deleted successfully!");
-                            fetchAmountSpentAndPromoCodes(); // Refresh the displayed amount and promo codes
+                            fetchAmountSpentAndGifts(); // Refresh the displayed amount and won gifts
                         } else {
                             alert("Failed to delete amount: " + response.error);
                         }
@@ -108,26 +119,30 @@
             }
         };
 
-        // Function to handle the click event for deleting promo codes
-        window.deletePromoCode = function (code) {
-            var confirmDelete = confirm("Are you sure you want to delete this promo code?");
+        // Function to delete a gift
+        window.deleteGift = function (gift) {
+            // Show confirmation dialog
+            var confirmDelete = confirm("Are you sure you want to delete this gift?");
             if (confirmDelete) {
                 $.ajax({
                     type: "POST",
-                    url: "/delete_promo_code",
-                    data: { promo_code: code },
+                    url: "/delete_gift",
+                    data: { gift: gift },
                     success: function (response) {
                         if (response.success) {
-                            alert("Promo code deleted successfully!");
-                            fetchAmountSpentAndPromoCodes(); // Refresh the displayed promo codes
+                            alert("Gift deleted successfully!");
+                            fetchAmountSpentAndGifts(); // Refresh the displayed won gifts
                         } else {
-                            alert("Failed to delete promo code: " + response.error);
+                            alert("Failed to delete gift: " + response.message);
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert("An error occurred while deleting the promo code: " + error);
+                        alert("An error occurred while deleting the gift: " + error);
                     }
                 });
+            } else {
+                // If user cancels the deletion
+                alert("Deletion cancelled.");
             }
         };
     });
