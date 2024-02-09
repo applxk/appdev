@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-import random
-import string
+from random import choice # 👽(add thisss) 👽
 from datetime import datetime
-
-👽 # (COPY THIS LINE) 👽
-from backend import store_chat_messages,  retrieve_chat_messages, retrieve_amount_spent, store_amount_spent, store_promo_codes, retrieve_promo_codes, store_subscribed_email, retrieve_subscribed_emails
+from backend import store_chat_messages, retrieve_chat_messages, retrieve_amount_spent, store_amount_spent, retrieve_won_gifts, store_won_gifts, store_subscribed_email, retrieve_subscribed_emails
+# 👽(add  retrieve_won_gifts, store_won_gifts) 👽
 
 app = Flask(__name__)
 
@@ -18,57 +16,61 @@ def customer_dashboard():
 def account_details():
     return render_template('includes/accountdetails.html')
 
-👽 # (COPY THE WHOLE OF #wheel & #coupons) 👽
-
+# 👽(copy everything from #wheel & #coupons) 👽
+# 👽(also delete anything related to promo_code) 👽
 # wheel
 @app.route('/wheel')
 def wheel():
     return render_template('includes/wheel.html')
 
+free_gifts = [
+    "Reglow sticker set",
+    "Metal straw sets",
+    "bamboo cutlery sets",
+    "Reglow water bottle",
+    "Reglow tote bag",
+    "Reglow plushie"
+]
+
 @app.route('/spin', methods=['POST'])
 def spin_wheel():
-    # promo codes are alphanumeric strings of length 8
-    promo_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    # Choose a random free gift
+    selected_gift = choice(free_gifts)
 
-    # Append the generated promo code to the list
-    generated_promo_codes.append(promo_code)
+    # Store the won gift
+    won_gifts = retrieve_won_gifts()
+    won_gifts.append(selected_gift)
+    store_won_gifts(won_gifts)
 
-    # Store the updated promo codes in shelve
-    store_promo_codes(generated_promo_codes)
+    return jsonify({'gift': selected_gift})
 
-    return jsonify({'promo_code': promo_code})
+@app.route('/get_won_gifts')
+def get_won_gifts():
+    won_gifts = retrieve_won_gifts()
+    return jsonify({'won_gifts': won_gifts})
 
-@app.route('/get_promo_codes')
-def get_promo_codes():
-    return jsonify({'promo_codes': generated_promo_codes})
+@app.route('/delete_gift', methods=['POST'])
+def delete_gift():
+    gift_to_delete = request.form.get('gift')
+    won_gifts = retrieve_won_gifts()
 
-@app.route('/delete_promo_code', methods=['POST'])
-def delete_promo_code():
-    promo_code_to_delete = request.form.get('promo_code')
-    if promo_code_to_delete in generated_promo_codes:
-        generated_promo_codes.remove(promo_code_to_delete)
-
-        # Store the updated promo codes in shelve
-        store_promo_codes(generated_promo_codes)
-
+    if gift_to_delete in won_gifts:
+        won_gifts.remove(gift_to_delete)
+        store_won_gifts(won_gifts)
         return jsonify({'success': True})
     else:
-        return jsonify({'success': False, 'message': 'Promo code not found'}), 404
-
+        return jsonify({'success': False, 'message': 'Gift not found'}), 404
 
 #coupons
 
-# List to store generated promo codes
-generated_promo_codes = []
-
 @app.route('/mycoupons')
 def my_coupons():
-    return render_template('includes/mycoupons.html', promo_codes=generated_promo_codes)
-👽 # (END OF COPYING WHOLE OF #wheel & #coupons ) 👽
+    won_gifts = retrieve_won_gifts()
+    return render_template('includes/mycoupons.html', won_gifts=won_gifts)
+
 
 #chatbot
 
-👽 # (COPY THIS LINE chat_messages) 👽
 # List to store chat messages
 chat_messages = []
 
@@ -164,8 +166,6 @@ def chat():
 
     return response
 
-👽 # (COPY THIS WHOLE OF /delete_message) 👽
-
 @app.route('/delete_message', methods=['POST'])
 def delete_message():
     index_to_delete = int(request.form.get('index'))
@@ -181,7 +181,6 @@ def delete_message():
         return jsonify({'success': False, 'message': 'Invalid index'}), 400
 
 
-👽 # (COPY WHOLE OF #membership) 👽
 #membership
 cumulative_amounts = retrieve_amount_spent() or []
 
@@ -237,12 +236,12 @@ def reset_amount_spent():
 @app.route('/membership')
 def membership():
     return render_template('includes/membership.html')
-👽 # (END OF COPYING #membership) 👽
 
 #membership backend
 @app.route('/membershipbackend')
 def membership_backend():
     return render_template('includes/membershipbackend.html')
+
 
 #shipping and delivery
 @app.route('/shippinganddelivery')
@@ -254,7 +253,6 @@ def shipping_and_delivery():
 def terms_and_conditions():
     return render_template('includes/termsandconditions.html')
 
-👽 # (COPY WHOLE OF #newsletter thank you, #newsletterbackend) 👽
 #newsletter thank you page
 @app.route('/newsletterthankyou')
 def newsletter_thank_you():
@@ -295,15 +293,9 @@ def delete_subscribed_email():
     else:
         return jsonify({'success': False, 'message': 'Email not found'}), 404
 
-👽 # (END OF COPYING newsletter shits) 👽
-
 if __name__ == '__main__':
 
-    👽 # (COPY chat_messages & generated_promo_code lines) 👽
     # List to store chat messages
     chat_messages = retrieve_chat_messages()
-
-    # Retrieve promo codes from storage or initialize an empty list
-    generated_promo_codes = retrieve_promo_codes() or []
 
     app.run(debug=True)
