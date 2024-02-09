@@ -1,3 +1,5 @@
+👽 (just replace the whole code) 👽
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -113,38 +115,41 @@
       },
     });
 
-    //display value based on the randomAngle
+    // Display value based on the randomAngle
     const valueGenerator = (angleValue) => {
-      for (let i of rotationValues) {
-
+    for (let i of rotationValues) {
         // if the angleValue is between min and max then display it
         if (angleValue >= i.minDegree && angleValue <= i.maxDegree) {
-          let labelText = "";
-          switch (i.value) {
-            case 1:
-              labelText = "Free Shipping!";
-              break;
-            case 2:
-              labelText = "$5 off $70 spend!";
-              break;
-            case 3:
-              labelText = "$3 off $50 spend!";
-              break;
-            case 4:
-              labelText = "$1 off $30 spend!";
-              break;
-            case 5:
-              labelText = "$5 off no min spend!";
-              break;
-            case 6:
-              labelText = "$1 off no min spend!";
-              break;
-            default:
-              labelText = "Other Text";
-          }
+            let labelText = "";
+            // Map the value to the corresponding gift
+            switch (i.value) {
+                case 1:
+                    labelText = "Reglow sticker set";
+                    break;
+                case 2:
+                    labelText = "Metal straw sets";
+                    break;
+                case 3:
+                    labelText = "bamboo cutlery sets";
+                    break;
+                case 4:
+                    labelText = "Reglow water bottle";
+                    break;
+                case 5:
+                    labelText = "Reglow tote bag";
+                    break;
+                case 6:
+                    labelText = "Reglow plushie";
+                    break;
+                default:
+                    labelText = "Other Text";
+            }
+            // Display the matched gift
+            document.getElementById("final-value").innerHTML = `<p class="label-text">You have won: <span>${labelText}</span></p>
+                        <p id="fyi">*added to your account</p>`;
         }
-      }
-    };
+    }
+};
 
     //Spinner count
     let count = 0;
@@ -152,75 +157,47 @@
     //100 rotations for animation and last rotation for result
     let resultValue = 101;
 
-    // Start spinning
+// Start spinning
 spinBtn.addEventListener("click", () => {
-  spinBtn.disabled = true;
+    spinBtn.disabled = true;
 
-  // Empty final value
-  document.getElementById("final-value").innerHTML = `<p>Good Luck!</p>`;
+    // Empty final value
+    document.getElementById("final-value").innerHTML = `<p>Good Luck!</p>`;
 
-  // Generate random degrees to stop at
-  let randomDegree = Math.floor(Math.random() * (355 - 0 + 1) + 0);
+    // Generate random degrees to stop at
+    let randomDegree = Math.floor(Math.random() * (355 - 0 + 1) + 0);
 
-  // Interval for rotation animation
-  let rotationInterval = window.setInterval(() => {
-    // Set rotation for the pie chart
-    myChart.options.rotation = myChart.options.rotation + resultValue;
+    // Interval for rotation animation
+    let rotationInterval = window.setInterval(() => {
+        // Set rotation for the pie chart
+        myChart.options.rotation = myChart.options.rotation + resultValue;
 
-    // Update chart with new value
-    myChart.update();
+        // Update chart with new value
+        myChart.update();
 
-    // If rotation > 360 reset it back to 0
-    if (myChart.options.rotation >= 360) {
-      count += 1;
-      resultValue -= 5;
-      myChart.options.rotation = 0;
-    } else if (count > 15 && myChart.options.rotation == randomDegree) {
-      // Call the /spin endpoint to get the promo code
-      fetch('/spin', { method: 'POST' })
-        .then(response => response.json())
-        .then(data => {
-          // Get the corresponding label text using the switch cases
-          let labelText = "";
-          for (let i of rotationValues) {
-            if (randomDegree >= i.minDegree && randomDegree <= i.maxDegree) {
-              switch (i.value) {
-                case 1:
-                  labelText = "Free Shipping!";
-                  break;
-                case 2:
-                  labelText = "$5 off $70 spend!";
-                  break;
-                case 3:
-                  labelText = "$3 off $50 spend!";
-                  break;
-                case 4:
-                  labelText = "$1 off $30 spend!";
-                  break;
-                case 5:
-                  labelText = "$5 off no min spend!";
-                  break;
-                case 6:
-                  labelText = "$1 off no min spend!";
-                  break;
-                default:
-                  labelText = "Other Text";
-              }
-              // Display the promo code and label text
-              document.getElementById("final-value").innerHTML = `<p class="label-text">You have won: <span>${labelText}</span></p>
-                <p class="label-text">Promo Code: ${data.promo_code}</p>
-                <p id="fyi">*added to your account</p>`;
-              spinBtn.disabled = false;
-              break;
-            }
-          }
-        });
+        // If rotation > 360 reset it back to 0
+        if (myChart.options.rotation >= 360) {
+            count += 1;
+            resultValue -= 5;
+            myChart.options.rotation = 0;
+        } else if (count > 15 && myChart.options.rotation == randomDegree) {
+            // Call the /spin endpoint to get the selected gift
+            fetch('/spin', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the selected gift
+                    document.getElementById("final-value").innerHTML = `<p class="label-text">You have won: <span>${data.gift}</span></p>
+                        <p id="fyi">*added to your account</p>`;
+                    spinBtn.disabled = false;
+                    // Call valueGenerator function to update displayed gift
+                    valueGenerator(myChart.options.rotation);
+                });
 
-      clearInterval(rotationInterval);
-      count = 0;
-      resultValue = 101;
-    }
-  }, 10);
+            clearInterval(rotationInterval);
+            count = 0;
+            resultValue = 101;
+        }
+    }, 10);
 });
     </script>
   </body>
